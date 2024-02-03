@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>TOP画面</div>
+  <div>勤怠修正ログ一覧画面</div>
 </template>

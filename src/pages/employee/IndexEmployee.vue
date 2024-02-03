@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>TOP画面</div>
+  <div>従業員一覧画面</div>
 </template>
