@@ -1,18 +1,35 @@
+import "vuetify/styles"
 import "./assets/main.scss"
 
 import { createPinia } from "pinia"
 import { createApp } from "vue"
 
+import { localize } from "@vee-validate/i18n"
+import ja from "@vee-validate/i18n/dist/locale/ja.json"
+import { required } from "@vee-validate/rules"
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
+import { configure, defineRule } from "vee-validate"
+import { createVuetify } from "vuetify"
+import * as components from "vuetify/components"
+import * as directives from "vuetify/directives"
 import App from "./App.vue"
 import router from "./router"
 
-const app = createApp(App)
-const pinia = createPinia()
+defineRule("required", required)
 
-pinia.use(piniaPluginPersistedstate)
+configure({
+  generateMessage: localize({
+    ja,
+  }),
+})
 
-app.use(pinia)
-app.use(router)
+localize("ja")
 
-app.mount("#app")
+const pinia = createPinia().use(piniaPluginPersistedstate)
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
+createApp(App).use(vuetify).use(pinia).use(router).mount("#app")
