@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ErrorMessage, Field, useFieldArray, useForm } from "vee-validate"
+import { Field, useFieldArray, useForm } from "vee-validate"
 import * as yup from "yup"
 
 // 入力フォームのバリデーション
@@ -8,14 +8,18 @@ const postRegisterSchema = yup.object({
     .array()
     .of(
       yup.object().shape({
-        plannedStartTime: yup.string(),
+        plannedStartTime: yup.string().required(),
         plannedEndTime: yup.string(),
       })
     )
     .strict(),
 })
 
-let dummy = []
+let dummy: {
+  date: number
+  plannedStartTime: string
+  plannedEndTime: string
+}[] = []
 for (let index = 1; index < 30; index++) {
   dummy.push({
     date: index,
@@ -40,47 +44,58 @@ const { fields: urlFields } = useFieldArray("dailyAttendances")
 </script>
 
 <template>
-  <div>勤怠入力画面画面</div>
+  <div>勤怠入力画面</div>
   <span>
     <form @submit="onSubmit">
-      <div v-for="(field, idx) in urlFields" :key="idx">
-        <div class="d-flex justify-space-between">
-          <div>
-            <Field
-              :id="`siteName_${idx}`"
-              :name="`dailyAttendances[${idx}].date`"
-              v-slot="{ field }"
-            >
-              <v-text-field disabled v-bind="field"></v-text-field>
-            </Field>
-          </div>
-          <div>
-            <ErrorMessage
-              :name="`dailyAttendances[${idx}].plannedStartTime`"
-              class="error"
-            />
-            <Field
-              :id="`siteName_${idx}`"
-              :name="`dailyAttendances[${idx}].plannedStartTime`"
-              v-slot="{ field }"
-            >
-              <v-text-field v-bind="field" style="width: 270px"></v-text-field>
-            </Field>
-          </div>
-          <ErrorMessage
-            :name="`dailyAttendances[${idx}].plannedEndTime`"
-            class="error"
-          />
-          <Field
-            :id="`referenceUrls_${idx}`"
-            :name="`dailyAttendances[${idx}].plannedEndTime`"
-            v-slot="{ field }"
-          >
-            <v-text-field v-bind="field" style="width: 270px"></v-text-field
-          ></Field>
-        </div>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>開始時刻</th>
+            <th>終了時刻</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(field, idx) in urlFields" :key="idx">
+            <td>{{ dummy[idx].date }}日</td>
+            <td>
+              <Field
+                :id="`siteName_${idx}`"
+                :name="`dailyAttendances[${idx}].plannedStartTime`"
+                style="width: 100%; height: 100%"
+              />
+            </td>
+            <td>
+              <Field
+                :id="`referenceUrls_${idx}`"
+                :name="`dailyAttendances[${idx}].plannedEndTime`"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <v-btn type="submit">送信</v-btn>
     </form>
   </span>
 </template>
+
+<style scoped lang="scss">
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid $c-primary--lighter;
+  text-align: left;
+  input:focus {
+    outline: none;
+  }
+}
+
+th {
+  color: white;
+  background-color: $c-primary;
+}
+</style>
