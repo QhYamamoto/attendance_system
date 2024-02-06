@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import NavBar from "@/components/NavBar.vue"
 import { API_META } from "@/constants/api"
 import { Request } from "@/modules/api"
 import { useAuthStore } from "@/stores/auth"
@@ -37,9 +38,33 @@ const resetStore = () => {
 </script>
 
 <template>
-  <div>TOP画面</div>
-  <button @click="setStore">ログイン</button>
-  <button @click="resetStore">ログアウト</button>
-  <p>{{ authStore.isLoggedIn ? "ログイン中" : "ログアウト中" }}</p>
+  <NavBar title="出退勤打刻" />
+  <v-main>
+    <v-container
+      class="d-flex flex-column align-center justify-center"
+      style="height: 100%"
+    >
+      <v-row class="d-flex align-end mb-5" style="font-size: 2rem">
+        15:33:56
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <v-btn
+            @click="setStore"
+            color="primary"
+            style="width: 150px; height: 100px; font-size: 1.5rem"
+            >出勤</v-btn
+          >
+        </v-col>
+        <v-col cols="6">
+          <v-btn
+            @click="resetStore"
+            color="error"
+            style="width: 150px; height: 100px; font-size: 1.5rem"
+            >退勤</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
-@/stores/auth

@@ -15,6 +15,8 @@ import * as directives from "vuetify/directives"
 import App from "./App.vue"
 import router from "./router"
 
+import "@mdi/font/css/materialdesignicons.css"
+
 defineRule("required", required)
 
 configure({
@@ -30,6 +32,9 @@ const pinia = createPinia().use(piniaPluginPersistedstate)
 const vuetify = createVuetify({
   components,
   directives,
+  icons: {
+    defaultSet: "mdi",
+  },
 })
 
 createApp(App).use(vuetify).use(pinia).use(router).mount("#app")

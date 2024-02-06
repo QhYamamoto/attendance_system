@@ -38,9 +38,9 @@ const router = createRouter({
       name: ROUTE_NAMES.top,
       component: TopView,
     },
-    // 勤怠入力画面 (勤怠一覧画面)
+    // 勤怠登録画面
     {
-      path: "/index",
+      path: "/shift",
       name: ROUTE_NAMES.attendance.index,
       component: IndexDailyAttendance,
     },

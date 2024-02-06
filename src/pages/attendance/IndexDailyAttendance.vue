@@ -1,101 +1,138 @@
 <script setup lang="ts">
-import { Field, useFieldArray, useForm } from "vee-validate"
-import * as yup from "yup"
+import NavBar from "@/components/NavBar.vue"
 
-// 入力フォームのバリデーション
-const postRegisterSchema = yup.object({
-  dailyAttendances: yup
-    .array()
-    .of(
-      yup.object().shape({
-        plannedStartTime: yup.string().required(),
-        plannedEndTime: yup.string(),
-      })
-    )
-    .strict(),
-})
+const headers = [
+  "日付",
+  "開始予定時刻",
+  "終了予定時刻",
+  "開始時刻",
+  "終了時刻",
+  "休憩時間",
+  "出勤形態",
+  "操作",
+]
 
-let dummy: {
-  date: number
-  plannedStartTime: string
-  plannedEndTime: string
-}[] = []
-for (let index = 1; index < 30; index++) {
-  dummy.push({
-    date: index,
+const dailyAttendances = [
+  {
+    date: "1日 (月)",
     plannedStartTime: "6:20",
-    plannedEndTime: "6:20",
-  })
-}
-
-const { handleSubmit } = useForm({
-  validationSchema: postRegisterSchema,
-  initialValues: {
-    dailyAttendances: dummy,
+    plannedEndTime: "9:20",
+    startTime: "6:20",
+    endTime: "9:20",
+    commuteMethod: 1,
   },
-})
-
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2))
-})
-
-// urlの配列項目
-const { fields: urlFields } = useFieldArray("dailyAttendances")
+  {
+    date: "2日 (火)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: "6:20",
+    endTime: "9:20",
+    commuteMethod: 2,
+  },
+  {
+    date: "3日 (水)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: "6:20",
+    endTime: "9:20",
+    commuteMethod: 3,
+  },
+  {
+    date: "4日 (木)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: "6:20",
+    endTime: "9:20",
+    commuteMethod: 1,
+  },
+  {
+    date: "5日 (金)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: "",
+    endTime: "",
+    commuteMethod: 2,
+  },
+  {
+    date: "6日 (土)",
+    plannedStartTime: "",
+    plannedEndTime: "",
+    startTime: "",
+    endTime: "",
+    commuteMethod: 3,
+  },
+  {
+    date: "7日 (日)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: null,
+    endTime: null,
+    commuteMethod: 1,
+  },
+  {
+    date: "8日 (月)",
+    plannedStartTime: "",
+    plannedEndTime: "",
+    startTime: null,
+    endTime: null,
+    commuteMethod: 2,
+  },
+  {
+    date: "9日 (火)",
+    plannedStartTime: "",
+    plannedEndTime: "",
+    startTime: null,
+    endTime: null,
+    commuteMethod: 3,
+  },
+  {
+    date: "10日 (水)",
+    plannedStartTime: "6:20",
+    plannedEndTime: "9:20",
+    startTime: null,
+    endTime: null,
+    commuteMethod: 1,
+  },
+]
 </script>
 
 <template>
-  <div>勤怠入力画面</div>
-  <span>
-    <form @submit="onSubmit">
-      <table>
-        <thead>
-          <tr>
-            <th>日付</th>
-            <th>開始時刻</th>
-            <th>終了時刻</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(field, idx) in urlFields" :key="idx">
-            <td>{{ dummy[idx].date }}日</td>
-            <td>
-              <Field
-                :id="`siteName_${idx}`"
-                :name="`dailyAttendances[${idx}].plannedStartTime`"
-                style="width: 100%; height: 100%"
-              />
-            </td>
-            <td>
-              <Field
-                :id="`referenceUrls_${idx}`"
-                :name="`dailyAttendances[${idx}].plannedEndTime`"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <v-btn type="submit">送信</v-btn>
-    </form>
-  </span>
+  <NavBar title="シフト登録" />
+  <v-main>
+    <v-container class="d-flex flex-column align-center justify-center">
+      <v-col cols="12">
+        <v-table fixed-header height="500px">
+          <thead>
+            <tr>
+              <th v-for="header in headers" :key="header" class="text-center">
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(attendance, i) in dailyAttendances" :key="i">
+              <td class="text-center">{{ attendance.date }}</td>
+              <td class="text-center">{{ attendance.plannedStartTime }}</td>
+              <td class="text-center">{{ attendance.plannedEndTime }}</td>
+              <td class="text-center">{{ attendance.startTime }}</td>
+              <td class="text-center">{{ attendance.endTime }}</td>
+              <td class="text-center"></td>
+              <td class="text-center">
+                {{
+                  attendance.commuteMethod === 1
+                    ? "出社"
+                    : attendance.commuteMethod === 2
+                    ? "出社 (自宅外)"
+                    : "在宅"
+                }}
+              </td>
+              <td class="text-center">
+                <v-btn color="primary" :disabled="i < 4"> 編集</v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-col>
+    </v-container>
+  </v-main>
 </template>
-
-<style scoped lang="scss">
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td,
-th {
-  border: 1px solid $c-primary--lighter;
-  text-align: left;
-  input:focus {
-    outline: none;
-  }
-}
-
-th {
-  color: white;
-  background-color: $c-primary;
-}
-</style>
