@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue"
 import { API_META } from "@/constants/api"
+import { dayjsKey } from "@/main"
 import { Request } from "@/modules/api"
 import { useAuthStore } from "@/stores/auth"
-import { onMounted } from "vue"
+import { default as Dayjs } from "dayjs"
+import { inject, onMounted, ref } from "vue"
+
+const dayjs = inject(dayjsKey) as typeof Dayjs
+const currentTime = ref(dayjs().format("HH:mm:ss"))
 
 const authStore = useAuthStore()
 
@@ -20,6 +25,10 @@ onMounted(() => {
     .catch((err) => {
       console.log(err)
     })
+
+  setInterval(() => {
+    currentTime.value = dayjs().format("HH:mm:ss")
+  }, 1000)
 })
 
 const setStore = () => {
@@ -45,7 +54,7 @@ const resetStore = () => {
       style="height: 100%"
     >
       <v-row class="d-flex align-end mb-5" style="font-size: 2rem">
-        15:33:56
+        {{ currentTime }}
       </v-row>
       <v-row>
         <v-col cols="6">

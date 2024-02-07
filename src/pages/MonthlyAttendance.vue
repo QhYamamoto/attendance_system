@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue"
+import { dayjsKey } from "@/main"
+import { default as Dayjs } from "dayjs"
+import { inject } from "vue"
+
+const dayjs = inject(dayjsKey) as typeof Dayjs
 
 const headers = [
   "日付",
@@ -14,7 +19,7 @@ const headers = [
 
 const dailyAttendances = [
   {
-    date: "1日 (月)",
+    date: "2024-02-01",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: "6:20",
@@ -22,7 +27,7 @@ const dailyAttendances = [
     commuteMethod: 1,
   },
   {
-    date: "2日 (火)",
+    date: "2024-02-02",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: "6:20",
@@ -30,7 +35,7 @@ const dailyAttendances = [
     commuteMethod: 2,
   },
   {
-    date: "3日 (水)",
+    date: "2024-02-03",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: "6:20",
@@ -38,7 +43,7 @@ const dailyAttendances = [
     commuteMethod: 3,
   },
   {
-    date: "4日 (木)",
+    date: "2024-02-04",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: "6:20",
@@ -46,7 +51,7 @@ const dailyAttendances = [
     commuteMethod: 1,
   },
   {
-    date: "5日 (金)",
+    date: "2024-02-05",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: "",
@@ -54,7 +59,7 @@ const dailyAttendances = [
     commuteMethod: 2,
   },
   {
-    date: "6日 (土)",
+    date: "2024-02-06",
     plannedStartTime: "",
     plannedEndTime: "",
     startTime: "",
@@ -62,7 +67,7 @@ const dailyAttendances = [
     commuteMethod: 3,
   },
   {
-    date: "7日 (日)",
+    date: "2024-02-07",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: null,
@@ -70,7 +75,7 @@ const dailyAttendances = [
     commuteMethod: 1,
   },
   {
-    date: "8日 (月)",
+    date: "2024-02-08",
     plannedStartTime: "",
     plannedEndTime: "",
     startTime: null,
@@ -78,7 +83,7 @@ const dailyAttendances = [
     commuteMethod: 2,
   },
   {
-    date: "9日 (火)",
+    date: "2024-02-09",
     plannedStartTime: "",
     plannedEndTime: "",
     startTime: null,
@@ -86,7 +91,7 @@ const dailyAttendances = [
     commuteMethod: 3,
   },
   {
-    date: "10日 (水)",
+    date: "2024-02-10",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
     startTime: null,
@@ -111,7 +116,9 @@ const dailyAttendances = [
           </thead>
           <tbody>
             <tr v-for="(attendance, i) in dailyAttendances" :key="i">
-              <td class="text-center">{{ attendance.date }}</td>
+              <td class="text-center">
+                {{ dayjs(attendance.date).format("D日 (dd)") }}
+              </td>
               <td class="text-center">{{ attendance.plannedStartTime }}</td>
               <td class="text-center">{{ attendance.plannedEndTime }}</td>
               <td class="text-center">{{ attendance.startTime }}</td>

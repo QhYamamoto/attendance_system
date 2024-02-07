@@ -1,5 +1,7 @@
+import IndexShiftTable from "@/pages/IndexShiftTable.vue"
+import MonthlyAttendance from "@/pages/MonthlyAttendance.vue"
 import TopView from "@/pages/TopView.vue"
-import IndexDailyAttendance from "@/pages/attendance/IndexDailyAttendance.vue"
+
 import SummaryMonthlyAttendance from "@/pages/attendance/SummaryMonthlyAttendance.vue"
 import IndexAttendanceEditLog from "@/pages/attendance_edit_log/IndexAttendanceEditLog.vue"
 import CreateEmployee from "@/pages/employee/CreateEmployee.vue"
@@ -11,6 +13,7 @@ import { createRouter, createWebHistory } from "vue-router"
 // createRouter内で使用するルート名
 export const ROUTE_NAMES = {
   top: "top",
+  IndexShiftTable: "IndexShiftTable",
   topAdmin: "topAdmin",
   attendance: {
     index: "indexDailyAttendance",
@@ -38,11 +41,17 @@ const router = createRouter({
       name: ROUTE_NAMES.top,
       component: TopView,
     },
+    // 月別勤怠情報確認画面
+    {
+      path: "/shift/monthly",
+      name: ROUTE_NAMES.IndexShiftTable,
+      component: MonthlyAttendance,
+    },
     // 勤怠登録画面
     {
-      path: "/shift",
+      path: "/shift/table",
       name: ROUTE_NAMES.attendance.index,
-      component: IndexDailyAttendance,
+      component: IndexShiftTable,
     },
     // 月次勤怠一覧画面
     {

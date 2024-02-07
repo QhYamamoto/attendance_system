@@ -25,11 +25,11 @@ const drawerItems = [
   },
   {
     label: "シフト登録",
-    to: "shift",
+    to: "/shift/monthly",
   },
   {
     label: "シフト一覧表",
-    to: "/shift-table",
+    to: "/shift/table",
   },
 ]
 </script>
