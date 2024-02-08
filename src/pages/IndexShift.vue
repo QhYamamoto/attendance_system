@@ -78,20 +78,16 @@ const showNext = () => {
   <NavBar title="シフト表" />
   <v-main>
     <v-container>
-      <v-row full-width class="d-flex justify-end">
-        <v-btn color="primary" class="mr-2" @click="showPrevious">前の週</v-btn>
-        <v-btn color="secondary" @click="showNext">次の週</v-btn>
-      </v-row>
       <v-row>
         <v-col cols="12">
           <v-table fixed-header height="500px">
             <thead>
               <tr>
-                <th></th>
+                <th class="text-center bg-blue-grey-lighten-5"></th>
                 <th
                   v-for="date in dates.slice(startIndex, endIndex)"
                   :key="date"
-                  class="text-center"
+                  class="text-center bg-blue-grey-lighten-5"
                 >
                   {{ dayjs(date).format("M/D (dd)") }}
                 </th>
@@ -112,6 +108,14 @@ const showNext = () => {
               </tr>
             </tbody>
           </v-table>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" class="d-flex justify-end">
+          <v-btn color="primary" class="mr-2" @click="showPrevious"
+            >前の週</v-btn
+          >
+          <v-btn color="secondary" @click="showNext">次の週</v-btn>
         </v-col>
       </v-row>
     </v-container>

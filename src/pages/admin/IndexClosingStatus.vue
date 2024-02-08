@@ -3,5 +3,5 @@ import NavBar from "@/components/NavBar.vue"
 </script>
 
 <template>
-  <NavBar title="TOP" />
+  <NavBar title="月締状況一覧画面" />
 </template>

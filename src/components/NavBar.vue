@@ -7,35 +7,36 @@ defineProps({
 
 const isShown = ref(false)
 
+const employeeId = "A12345"
 const menuItems = [
   {
     label: "登録情報編集",
-    to: "/employee/edit",
+    to: `/${employeeId}`,
   },
   {
     label: "パスワード変更",
-    to: "/employee/edit",
+    to: `/${employeeId}/password`,
   },
 ]
 
 const drawerItems = [
   {
     label: "出退勤打刻",
-    to: "/",
+    to: "/attendance/record",
   },
   {
-    label: "シフト登録",
-    to: "/shift/monthly",
+    label: "勤怠登録",
+    to: "/attendance/2024/2",
   },
   {
-    label: "シフト一覧表",
-    to: "/shift/table",
+    label: "シフト表",
+    to: "/shift",
   },
 ]
 </script>
 
 <template>
-  <v-app-bar color="deep-purple accent-4" dark prominent>
+  <v-app-bar color="blue-grey">
     <v-app-bar-nav-icon @click.stop="isShown = !isShown"> </v-app-bar-nav-icon>
     <v-toolbar-title>{{ title }}</v-toolbar-title>
     <template v-slot:append>
