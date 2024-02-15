@@ -75,7 +75,7 @@ const showNext = () => {
 </script>
 
 <template>
-  <NavBar title="シフト表" />
+  <NavBar title="シフト一覧表" />
   <v-main>
     <v-container>
       <v-row>

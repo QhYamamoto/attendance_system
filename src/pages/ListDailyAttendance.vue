@@ -102,7 +102,7 @@ const dailyAttendances = [
 </script>
 
 <template>
-  <NavBar title="勤怠登録" />
+  <NavBar title="勤怠管理画面" />
   <v-main>
     <v-container>
       <v-row class="d-flex justify-center align-center">

@@ -3,5 +3,5 @@ import NavBar from "@/components/NavBar.vue"
 </script>
 
 <template>
-  <NavBar title="TOP画面" />
+  <NavBar title="勤怠管理画面" />
 </template>

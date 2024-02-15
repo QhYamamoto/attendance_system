@@ -3,5 +3,5 @@ import NavBar from "@/components/NavBar.vue"
 </script>
 
 <template>
-  <NavBar title="勤怠登録情報確認画面 (管理者用)" />
+  <NavBar title="月次勤怠情報一覧画面" />
 </template>

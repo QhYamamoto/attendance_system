@@ -1,36 +1,44 @@
-import ChangePassword from "@/pages/ChangePassword.vue"
-import IndexAttendance from "@/pages/IndexAttendance.vue"
-import IndexShift from "@/pages/IndexShift.vue"
-import MyPage from "@/pages/MyPage.vue"
+import ListDailyAttendance from "@/pages/ListDailyAttendance.vue"
+import ListShift from "@/pages/ListShift.vue"
 import RecordAttendance from "@/pages/RecordAttendance.vue"
 import TopView from "@/pages/TopView.vue"
+import ChangeEmployeePassword from "@/pages/admin/ChangeEmployeePassword.vue"
 import CreateEmployee from "@/pages/admin/CreateEmployee.vue"
-import DetailsEmployee from "@/pages/admin/DetailsEmployee.vue"
-import AdminIndexAttendance from "@/pages/admin/IndexAttendance.vue"
-import IndexAttendanceEditLogVue from "@/pages/admin/IndexAttendanceEditLog.vue"
-import IndexClosingStatus from "@/pages/admin/IndexClosingStatus.vue"
-import IndexEmployee from "@/pages/admin/IndexEmployee.vue"
+import DetailEmployee from "@/pages/admin/DetailEmployee.vue"
+import ListAttendanceEditLog from "@/pages/admin/ListAttendanceEditLog.vue"
+import AdminListDailyAttendance from "@/pages/admin/ListDailyAttendance.vue"
+import ListEmployee from "@/pages/admin/ListEmployee.vue"
+import ListMonthlyAttendance from "@/pages/admin/ListMonthlyAttendance.vue"
 import AdminTopView from "@/pages/admin/TopView.vue"
 import TransferEmployee from "@/pages/admin/TransferEmployee.vue"
+import ChangePassword from "@/pages/mypage/ChangePassword.vue"
+import MypageDetailView from "@/pages/mypage/DetailView.vue"
+import MypageIndexView from "@/pages/mypage/IndexView.vue"
 
 import { createRouter, createWebHistory } from "vue-router"
 
 // createRouter内で使用するルート名
 export const ROUTE_NAMES = {
-  topView: "TopView",
-  indexShift: "IndexShift",
-  myPage: "MyPage",
-  changePassword: "ChangePassword",
+  listDailyAttendance: "ListDailyAttendance",
+  listShift: "ListShift",
   recordAttendance: "RecordAttendance",
-  indexAttendance: "IndexAttendance",
-  adminTopView: "AdminTopView",
-  indexEmployee: "IndexEmployee",
-  createEmployee: "CreateEmployee",
-  transferEmployee: "TransferEmployee",
-  detailsEmployee: "DetailsEmployee",
-  indexClosingStatus: "IndexClosingStatus",
-  adminIndexAttendance: "AdminIndexAttendance",
-  indexAttendanceEditLog: "IndexAttendanceEditLog",
+  topView: "TopView",
+  mypage: {
+    indexView: "MypageIndexView",
+    detailView: "MypageDetailView",
+    changePassword: "ChangePassword",
+  },
+  admin: {
+    changeEmployeePassword: "ChangeEmployeePassword",
+    createEmployee: "CreateEmployee",
+    detailEmployee: "DetailEmployee",
+    listAttendanceEditLog: "ListAttendanceEditLog",
+    listDailyAttendance: "AdminListDailyAttendance",
+    listEmployee: "ListEmployee",
+    listMonthlyAttendance: "ListMonthlyAttendance",
+    topView: "AdminTopView",
+    transferEmployee: "TransferEmployee",
+  },
 }
 
 // パス定義で使用する正規表現
@@ -52,23 +60,28 @@ const router = createRouter({
     {
       // シフト表画面
       path: "/shift",
-      name: ROUTE_NAMES.indexShift,
-      component: IndexShift,
+      name: ROUTE_NAMES.listShift,
+      component: ListShift,
     },
     {
       path: `/:employeeId(${regexps.employeeId})`,
       children: [
         {
-          // マイページ画面
-          path: ``,
-          name: ROUTE_NAMES.myPage,
-          component: MyPage,
+          // マイページ
+          path: "",
+          name: ROUTE_NAMES.mypage.indexView,
+          component: MypageIndexView,
+        },
+        {
+          // 登録情報確認画面
+          path: "detail",
+          name: ROUTE_NAMES.mypage.detailView,
+          component: MypageDetailView,
         },
         {
           // パスワード変更画面
-          // ×
-          path: `password`,
-          name: ROUTE_NAMES.changePassword,
+          path: "password",
+          name: ROUTE_NAMES.mypage.changePassword,
           component: ChangePassword,
         },
       ],
@@ -83,10 +96,10 @@ const router = createRouter({
           component: RecordAttendance,
         },
         {
-          // 勤怠登録情報一覧画面
+          // 勤怠管理画面
           path: `:year(${regexps.year})/:month(${regexps.month})`,
-          name: ROUTE_NAMES.indexAttendance,
-          component: IndexAttendance,
+          name: ROUTE_NAMES.listDailyAttendance,
+          component: ListDailyAttendance,
         },
       ],
     },
@@ -96,8 +109,14 @@ const router = createRouter({
         {
           // 管理者TOP画面
           path: "",
-          name: ROUTE_NAMES.adminTopView,
+          name: ROUTE_NAMES.admin.topView,
           component: AdminTopView,
+        },
+        {
+          // 月次勤怠情報一覧画面
+          path: "monthly-attendance",
+          name: ROUTE_NAMES.admin.listMonthlyAttendance,
+          component: ListMonthlyAttendance,
         },
         {
           path: "employee",
@@ -105,49 +124,49 @@ const router = createRouter({
             // 従業員一覧画面
             {
               path: "",
-              name: ROUTE_NAMES.indexEmployee,
-              component: IndexEmployee,
+              name: ROUTE_NAMES.admin.listEmployee,
+              component: ListEmployee,
             },
             {
               // 従業員登録画面
               path: "create",
-              name: ROUTE_NAMES.createEmployee,
+              name: ROUTE_NAMES.admin.createEmployee,
               component: CreateEmployee,
             },
             {
               // 従業員移行画面
               path: "transfer",
-              name: ROUTE_NAMES.transferEmployee,
+              name: ROUTE_NAMES.admin.transferEmployee,
               component: TransferEmployee,
-            },
-            {
-              // 従業員詳細画面
-              path: `:employeeId(${regexps.employeeId})`,
-              name: ROUTE_NAMES.detailsEmployee,
-              component: DetailsEmployee,
             },
           ],
         },
         {
-          // 月締状況一覧画面
-          path: "closing-status",
-          name: ROUTE_NAMES.indexClosingStatus,
-          component: IndexClosingStatus,
-        },
-        {
-          path: "attendance",
+          path: `:employeeId(${regexps.employeeId})`,
           children: [
             {
-              // 勤怠登録情報確認画面 (管理者用)
-              path: `:year(${regexps.year})/:month(${regexps.month})`,
-              name: ROUTE_NAMES.adminIndexAttendance,
-              component: AdminIndexAttendance,
+              // 従業員詳細画面
+              path: "",
+              name: ROUTE_NAMES.admin.detailEmployee,
+              component: DetailEmployee,
+            },
+            {
+              // 従業員パスワード変更画面
+              path: `password`,
+              name: ROUTE_NAMES.admin.changeEmployeePassword,
+              component: ChangeEmployeePassword,
+            },
+            {
+              // 勤怠管理画面 (管理者用)
+              path: `attendance/:year(${regexps.year})/:month(${regexps.month})`,
+              name: ROUTE_NAMES.admin.listDailyAttendance,
+              component: AdminListDailyAttendance,
             },
             {
               // 勤怠編集ログ一覧画面
-              path: `log/:employeeId(${regexps.employeeId})/:year(${regexps.year})/:month(${regexps.month})`,
-              name: ROUTE_NAMES.indexAttendanceEditLog,
-              component: IndexAttendanceEditLogVue,
+              path: `attendance-edit-log/:year(${regexps.year})/:month(${regexps.month})`,
+              name: ROUTE_NAMES.admin.listAttendanceEditLog,
+              component: ListAttendanceEditLog,
             },
           ],
         },

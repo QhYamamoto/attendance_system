@@ -3,5 +3,5 @@ import NavBar from "@/components/NavBar.vue"
 </script>
 
 <template>
-  <NavBar title="月締状況一覧画面" />
+  <NavBar title="従業員パスワード変更画面" />
 </template>

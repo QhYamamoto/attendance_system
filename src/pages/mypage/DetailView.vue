@@ -3,5 +3,5 @@ import NavBar from "@/components/NavBar.vue"
 </script>
 
 <template>
-  <NavBar title="TOP画面" />
+  <NavBar title="登録情報確認画面" />
 </template>
