@@ -4,8 +4,6 @@ import { RouterView } from "vue-router"
 
 <template>
   <v-app>
-    <div class="d-flex align-center justify-center" style="height: 100vh">
-      <RouterView />
-    </div>
+    <RouterView />
   </v-app>
 </template>

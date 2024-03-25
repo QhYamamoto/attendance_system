@@ -23,22 +23,18 @@ export const ROUTE_NAMES = {
   listShift: "ListShift",
   recordAttendance: "RecordAttendance",
   topView: "TopView",
-  mypage: {
-    indexView: "MypageIndexView",
-    detailView: "MypageDetailView",
-    changePassword: "ChangePassword",
-  },
-  admin: {
-    changeEmployeePassword: "ChangeEmployeePassword",
-    createEmployee: "CreateEmployee",
-    detailEmployee: "DetailEmployee",
-    listAttendanceEditLog: "ListAttendanceEditLog",
-    listDailyAttendance: "AdminListDailyAttendance",
-    listEmployee: "ListEmployee",
-    listMonthlyAttendance: "ListMonthlyAttendance",
-    topView: "AdminTopView",
-    transferEmployee: "TransferEmployee",
-  },
+  mypageIndexView: "MypageIndexView",
+  mypageDetailView: "MypageDetailView",
+  mypageChangePassword: "ChangePassword",
+  adminChangeEmployeePassword: "AdminChangeEmployeePassword",
+  adminCreateEmployee: "AdminCreateEmployee",
+  adminDetailEmployee: "AdminDetailEmployee",
+  adminListAttendanceEditLog: "AdminListAttendanceEditLog",
+  adminListDailyAttendance: "AdminListDailyAttendance",
+  adminListEmployee: "AdminListEmployee",
+  adminListMonthlyAttendance: "AdminListMonthlyAttendance",
+  adminTopView: "AdminTopView",
+  adminTransferEmployee: "AdminTransferEmployee",
 }
 
 // パス定義で使用する正規表現
@@ -69,19 +65,19 @@ const router = createRouter({
         {
           // マイページ
           path: "",
-          name: ROUTE_NAMES.mypage.indexView,
+          name: ROUTE_NAMES.mypageIndexView,
           component: MypageIndexView,
         },
         {
           // 登録情報確認画面
           path: "detail",
-          name: ROUTE_NAMES.mypage.detailView,
+          name: ROUTE_NAMES.mypageDetailView,
           component: MypageDetailView,
         },
         {
           // パスワード変更画面
           path: "password",
-          name: ROUTE_NAMES.mypage.changePassword,
+          name: ROUTE_NAMES.mypageChangePassword,
           component: ChangePassword,
         },
       ],
@@ -109,13 +105,13 @@ const router = createRouter({
         {
           // 管理者TOP画面
           path: "",
-          name: ROUTE_NAMES.admin.topView,
+          name: ROUTE_NAMES.adminTopView,
           component: AdminTopView,
         },
         {
           // 月次勤怠情報一覧画面
           path: "monthly-attendance",
-          name: ROUTE_NAMES.admin.listMonthlyAttendance,
+          name: ROUTE_NAMES.adminListMonthlyAttendance,
           component: ListMonthlyAttendance,
         },
         {
@@ -124,19 +120,19 @@ const router = createRouter({
             // 従業員一覧画面
             {
               path: "",
-              name: ROUTE_NAMES.admin.listEmployee,
+              name: ROUTE_NAMES.adminListEmployee,
               component: ListEmployee,
             },
             {
               // 従業員登録画面
               path: "create",
-              name: ROUTE_NAMES.admin.createEmployee,
+              name: ROUTE_NAMES.adminCreateEmployee,
               component: CreateEmployee,
             },
             {
               // 従業員移行画面
               path: "transfer",
-              name: ROUTE_NAMES.admin.transferEmployee,
+              name: ROUTE_NAMES.adminTransferEmployee,
               component: TransferEmployee,
             },
           ],
@@ -147,25 +143,25 @@ const router = createRouter({
             {
               // 従業員詳細画面
               path: "",
-              name: ROUTE_NAMES.admin.detailEmployee,
+              name: ROUTE_NAMES.adminDetailEmployee,
               component: DetailEmployee,
             },
             {
               // 従業員パスワード変更画面
               path: `password`,
-              name: ROUTE_NAMES.admin.changeEmployeePassword,
+              name: ROUTE_NAMES.adminChangeEmployeePassword,
               component: ChangeEmployeePassword,
             },
             {
               // 勤怠管理画面 (管理者用)
               path: `attendance/:year(${regexps.year})/:month(${regexps.month})`,
-              name: ROUTE_NAMES.admin.listDailyAttendance,
+              name: ROUTE_NAMES.adminListDailyAttendance,
               component: AdminListDailyAttendance,
             },
             {
               // 勤怠編集ログ一覧画面
               path: `attendance-edit-log/:year(${regexps.year})/:month(${regexps.month})`,
-              name: ROUTE_NAMES.admin.listAttendanceEditLog,
+              name: ROUTE_NAMES.adminListAttendanceEditLog,
               component: ListAttendanceEditLog,
             },
           ],

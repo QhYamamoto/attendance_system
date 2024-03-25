@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue"
+import TemporalNavigator from "@/components/molecules/TemporalNavigator.vue"
 import { dayjsKey } from "@/main"
 import { default as Dayjs } from "dayjs"
-import { inject, ref } from "vue"
+import { computed, inject, ref } from "vue"
 
 const dayjs = inject(dayjsKey) as typeof Dayjs
 
+const today = dayjs()
 const dates = new Array<number>(28)
-  .fill(1)
-  .map((n, i) => `2024-02-${(n + i).toString().padStart(2, "0")}`)
+  .fill(0)
+  .map((n, i) => today.add(n + i, "day").format("YYYY-MM-DD"))
 
 const employees = new Array<number>(10).fill(1).map((n, i) => ({
   id: `A${(n + i).toString().padStart(5, "0")}`,
   name: `従業員${n + i}`,
   type: "PG",
-  dailyAttendances: new Array<number>(28).fill(1).reduce(
+  dailyAttendances: new Array<number>(28).fill(0).reduce(
     (
       acc: {
         [key: string]: {
@@ -30,7 +32,7 @@ const employees = new Array<number>(10).fill(1).map((n, i) => ({
         : {
             ...acc,
             ...{
-              [`2024-02-${(m + j).toString().padStart(2, "0")}`]: {
+              [today.add(m + j, "day").format("YYYY-MM-DD")]: {
                 plannedStartTime: "6:20",
                 plannedEndTime: "9:20",
               },
@@ -51,17 +53,23 @@ const formatPlannedTimes = (employeeI: number, date: string) => {
     : ""
 }
 
-const numberDateOfColumns = 7
+const numberOfDateColumns = 7
 const startIndex = ref(0)
-const endIndex = ref(numberDateOfColumns)
+const endIndex = ref(numberOfDateColumns)
+const navigatorLabel = computed(
+  () =>
+    `${today.add(startIndex.value, "day").format("M月D日(dd)")} ~ ${today
+      .add(endIndex.value - 1, "day")
+      .format("M月D日(dd)")}`
+)
 
 const showPrevious = () => {
   if (startIndex.value === 0) {
     return
   }
 
-  startIndex.value = startIndex.value - numberDateOfColumns
-  endIndex.value = endIndex.value - numberDateOfColumns
+  startIndex.value = startIndex.value - numberOfDateColumns
+  endIndex.value = endIndex.value - numberOfDateColumns
 }
 
 const showNext = () => {
@@ -69,15 +77,25 @@ const showNext = () => {
     return
   }
 
-  startIndex.value = startIndex.value + numberDateOfColumns
-  endIndex.value = endIndex.value + numberDateOfColumns
+  startIndex.value = startIndex.value + numberOfDateColumns
+  endIndex.value = endIndex.value + numberOfDateColumns
 }
 </script>
 
 <template>
   <NavBar title="シフト一覧表" />
   <v-main>
-    <v-container>
+    <v-container class="pt-10">
+      <v-row class="d-flex justify-center align-center">
+        <p class="text-h6">シフト一覧</p>
+      </v-row>
+      <v-row class="d-flex justify-center align-center">
+        <TemporalNavigator
+          :label="navigatorLabel"
+          :show-previous="showPrevious"
+          :show-next="showNext"
+        />
+      </v-row>
       <v-row>
         <v-col cols="12">
           <v-table fixed-header height="500px">
@@ -108,14 +126,6 @@ const showNext = () => {
               </tr>
             </tbody>
           </v-table>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" class="d-flex justify-end">
-          <v-btn color="primary" class="mr-2" @click="showPrevious"
-            >前の週</v-btn
-          >
-          <v-btn color="secondary" @click="showNext">次の週</v-btn>
         </v-col>
       </v-row>
     </v-container>

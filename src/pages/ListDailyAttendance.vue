@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavBar.vue"
+import ButtonSmall from "@/components/atoms/buttons/ButtonSmall.vue"
+import TemporalNavigator from "@/components/molecules/TemporalNavigator.vue"
 import { dayjsKey } from "@/main"
+import router from "@/router"
 import { default as Dayjs } from "dayjs"
-import { inject } from "vue"
+import duration from "dayjs/plugin/duration"
+import { computed, inject } from "vue"
+import { useRoute } from "vue-router"
 
 const dayjs = inject(dayjsKey) as typeof Dayjs
+dayjs.extend(duration)
+const route = useRoute()
+const year = computed(() => Number(route.params.year))
+const month = computed(() => Number(route.params.month))
 
 const headers = [
   "日付",
   "開始予定時刻",
   "終了予定時刻",
+  "休憩時間",
   "開始時刻",
   "終了時刻",
-  "休憩時間",
+  "合計勤務時間",
   "出勤形態",
   "操作",
 ]
@@ -20,8 +30,9 @@ const headers = [
 const dailyAttendances = [
   {
     date: "2024-02-01",
-    plannedStartTime: "6:20",
+    plannedStartTime: "6:05",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: "6:20",
     endTime: "9:20",
     commuteMethod: 1,
@@ -30,6 +41,7 @@ const dailyAttendances = [
     date: "2024-02-02",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: "6:20",
     endTime: "9:20",
     commuteMethod: 2,
@@ -38,6 +50,7 @@ const dailyAttendances = [
     date: "2024-02-03",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: "6:20",
     endTime: "9:20",
     commuteMethod: 3,
@@ -46,6 +59,7 @@ const dailyAttendances = [
     date: "2024-02-04",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: "6:20",
     endTime: "9:20",
     commuteMethod: 1,
@@ -54,38 +68,43 @@ const dailyAttendances = [
     date: "2024-02-05",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
-    startTime: "",
-    endTime: "",
+    restTime: null,
+    startTime: null,
+    endTime: null,
     commuteMethod: 2,
   },
   {
     date: "2024-02-06",
-    plannedStartTime: "",
-    plannedEndTime: "",
-    startTime: "",
-    endTime: "",
+    plannedStartTime: null,
+    plannedEndTime: null,
+    restTime: null,
+    startTime: null,
+    endTime: null,
     commuteMethod: 3,
   },
   {
     date: "2024-02-07",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: null,
     endTime: null,
     commuteMethod: 1,
   },
   {
     date: "2024-02-08",
-    plannedStartTime: "",
-    plannedEndTime: "",
+    plannedStartTime: null,
+    plannedEndTime: null,
+    restTime: null,
     startTime: null,
     endTime: null,
     commuteMethod: 2,
   },
   {
     date: "2024-02-09",
-    plannedStartTime: "",
-    plannedEndTime: "",
+    plannedStartTime: null,
+    plannedEndTime: null,
+    restTime: null,
     startTime: null,
     endTime: null,
     commuteMethod: 3,
@@ -94,11 +113,49 @@ const dailyAttendances = [
     date: "2024-02-10",
     plannedStartTime: "6:20",
     plannedEndTime: "9:20",
+    restTime: null,
     startTime: null,
     endTime: null,
     commuteMethod: 1,
   },
 ]
+
+const getTimeDiff = (
+  date: string | null,
+  start: string | null,
+  end: string | null
+) => {
+  const diffInMinutes = dayjs(`${date} ${end}`).diff(
+    dayjs(`${date} ${start}`),
+    "minute"
+  )
+
+  return dayjs
+    .duration({
+      minutes: diffInMinutes,
+    })
+    .asHours()
+}
+
+const showPrevious = () => {
+  router.push(
+    `/attendance/${
+      month.value !== 1
+        ? `${year.value}/${month.value - 1}`
+        : `${year.value - 1}/12`
+    }`
+  )
+}
+
+const showNext = () => {
+  router.push(
+    `/attendance/${
+      month.value !== 12
+        ? `${year.value}/${month.value + 1}`
+        : `${year.value + 1}/1`
+    }`
+  )
+}
 </script>
 
 <template>
@@ -106,16 +163,10 @@ const dailyAttendances = [
   <v-main>
     <v-container>
       <v-row class="d-flex justify-center align-center">
-        <v-btn
-          color="blue-grey-lighten-3"
-          density="compact"
-          icon="mdi-arrow-left"
-        />
-        <span class="mx-5" style="font-size: 1.4rem">2024年2月</span>
-        <v-btn
-          color="blue-grey-lighten-3"
-          density="compact"
-          icon="mdi-arrow-right"
+        <TemporalNavigator
+          :label="`${year}年${month}月`"
+          :show-previous="showPrevious"
+          :show-next="showNext"
         />
       </v-row>
       <v-row>
@@ -139,9 +190,19 @@ const dailyAttendances = [
                 </td>
                 <td class="text-center">{{ attendance.plannedStartTime }}</td>
                 <td class="text-center">{{ attendance.plannedEndTime }}</td>
+                <td class="text-center">{{ attendance.restTime }}</td>
                 <td class="text-center">{{ attendance.startTime }}</td>
                 <td class="text-center">{{ attendance.endTime }}</td>
-                <td class="text-center"></td>
+                <td>
+                  予定:
+                  {{
+                    getTimeDiff(
+                      attendance.date,
+                      attendance.plannedStartTime,
+                      attendance.plannedEndTime
+                    )
+                  }}
+                </td>
                 <td class="text-center">
                   {{
                     attendance.commuteMethod === 1
@@ -152,17 +213,15 @@ const dailyAttendances = [
                   }}
                 </td>
                 <td v-if="i >= 4" class="text-center" style="width: 140px">
-                  <div
-                    class="d-flex justify-space-between"
-                    v-if="
-                      attendance.plannedStartTime || attendance.plannedEndTime
-                    "
-                  >
-                    <v-btn size="small" color="primary">編集</v-btn>
-                    <v-btn size="small" color="error">削除</v-btn>
-                  </div>
-                  <div class="d-flex justify-start" v-else>
-                    <v-btn size="small" color="secondary">入力</v-btn>
+                  <div class="d-flex justify-center">
+                    <ButtonSmall
+                      v-if="
+                        attendance.plannedStartTime || attendance.plannedEndTime
+                      "
+                      color="secondary"
+                      text="編集"
+                    />
+                    <ButtonSmall v-else text="入力" color="primary" />
                   </div>
                 </td>
                 <td v-else></td>
